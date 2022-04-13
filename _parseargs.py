@@ -6,21 +6,35 @@
 import argparse
 import numpy as np
 import os
+import json
+
+DEFAULTS_PATH = '_data/defaults.json'
+
+BASE_DEFAULTS = {
+    "amplitude": 0.2,
+    "duration" : 10,
+    "startsilence": 1,
+    "endsilence" : 1,
+    "fs" : 44100,
+    "inputChannelMap" : [1],
+    "outputChannelMap": [1],
+    "inputdevice": 0,
+    "outputdevice": 1,
+    "sweeprange": [1 , None]
+}
 
 
 # === FUNCTION: Parsing command line arguments
-def _parse():
-
+def parse():
     # Load the defaults
-    defaults = np.load('_data/defaults.npy', allow_pickle = True).item()
+    with open(DEFAULTS_PATH) as f:
+        defaults = json.load(f)
 
     parser = argparse.ArgumentParser(description='Setting the parameters for RIR measurement using exponential sine sweep \n ----------------------------------------------------------------------')
     #---
     parser.add_argument("-f", "--fs", type = int, help=" The sampling rate (make sure it matches that of your audio interface). Default: 44100 Hz.", default = defaults['fs'])
     #---
     parser.add_argument("-dur", "--duration", type = int, help=" The duration of a single sweep. Default: 15 seconds.", default = defaults['duration'])
-    #---
-    parser.add_argument("-r", "--reps", type = int, help = "Number of repetitions of the sinesweep. Default: 1.", default = defaults['reps'])
     #---
     # parser.add_argument("-fr", "--frange", type =  tuple, help = "Frequency range of the sweep (f_min, f_max). Default: (0.01,20000) Hz.", default = (0.01,20000))
     #---
@@ -59,7 +73,7 @@ def _parse():
 #------------------------------------------------
 # === FUNCTION: Update defaults
 
-def _defaults(args):
+def set_defaults(args):
 
     if (args.listdev == False and  args.defaults == False):
         defaults = {
@@ -67,8 +81,6 @@ def _defaults(args):
             "duration" : args.duration,
             "startsilence": args.startsilence,
             "endsilence" : args.endsilence,
-            "reps" : args.reps,
-
             "fs" : args.fs,
             "inputChannelMap" : args.inputChannelMap,
             "outputChannelMap": args.outputChannelMap,
@@ -76,36 +88,29 @@ def _defaults(args):
             "outputdevice": args.outputdevice,
             "sweeprange": args.sweeprange
         }
-        np.save('_data/defaults.npy', defaults)
+
+        with open(DEFAULTS_PATH, "w") as f:
+            json.dump(defaults, f)
+        # np.save('_data/defaults.npy', defaults)
+        print(defaults)
 
 
 #-------------------------------------------------------------
 # === FUNCTION: Check if a file with defaults exists. If not, make one
 
-def _checkdefaults():
+def check_defaults():
 
     flag_defaultsInitialized = True
 
     if not os.path.exists('_data'):
         os.makedirs('_data')
 
-    if not os.path.exists('_data/defaults.npy'):
+    if not os.path.exists(DEFAULTS_PATH):
         print("Default settings not detected. Creating a defaults file in _data")
-        defaults = {
-            "amplitude": 0.2,
-            "duration" : 10,
-            "startsilence": 1,
-            "endsilence" : 1,
-            "reps" : 1,
 
-            "fs" : 44100,
-            "inputChannelMap" : [1],
-            "outputChannelMap": [1],
-            "inputdevice": 0,
-            "outputdevice": 1,
-            "sweeprange": [0 , 0]
-        }
-        np.save('_data/defaults.npy', defaults)
+        with open(DEFAULTS_PATH, "w") as f:
+            json.dump(BASE_DEFAULTS, f)
+        # np.save('_data/defaults.npy', BASE_DEFAULTS)
         flag_defaultsInitialized = False
 
     return flag_defaultsInitialized

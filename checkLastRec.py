@@ -3,10 +3,12 @@
 # Vizualizing the results from the last recording
 
 import numpy as np
-from matplotlib import pyplot as plt
-import soundfile as sf   # for loading wavfiles
-from scipy.signal import spectrogram
 import os
+import soundfile as sf   # for loading wavfiles
+
+from matplotlib import pyplot as plt
+from scipy.signal import spectrogram
+
 
 fs = 44100
 

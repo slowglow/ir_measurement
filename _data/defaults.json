@@ -1,0 +1,1 @@
+{"amplitude": 0.5, "duration": 10, "startsilence": 1, "endsilence": 1, "fs": 44100, "inputChannelMap": [1], "outputChannelMap": [1], "inputdevice": 4, "outputdevice": 6, "sweeprange": [100, 15000]}

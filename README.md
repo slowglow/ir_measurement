@@ -73,8 +73,6 @@ python measure.py -dur 2 -r 2 -a 0.5 -ss 2 -es 1 -chin 1  -chou 2
 
   - Setting the sine sweep duration to 2 seconds: ```-dur 2```
 
-  - Choosing the number of sweep repetitions```-r 2```  
-
   - Setting the sweep amplitude:  ```-a 0.5```
   - Setting the silence at the start and at the end of a sweep (e.g., 2 seconds and 1 second, respectively):  ```-ss 2 -es 1```
 
