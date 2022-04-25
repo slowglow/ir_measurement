@@ -16,15 +16,15 @@ The code is based on the exponential sine sweep method and its modifications, pr
 * Plotting and vizualization [```matplotlib```](https://matplotlib.org)
 
 ### First steps
-The main file used to record a room impulse response is ```measure.py```. When running  it for the first time from the terminal, a file with default parameters is created in ```_data/defaults.npy``` (recording doesn't take place when running the script for the first time.)
+The main file used to record a room impulse response is ```measure.py```. When running  it for the first time from the terminal, a file with default parameters is created in ```_data/config.npy``` (recording doesn't take place when running the script for the first time.)
 ```
 => python measure.py
-Default settings not detected. Creating a defaults file in _data
+Default settings not detected. Creating a config file in _data
 ```
 
 After default settings have been generated, they can be checked by typing
 ```
-python measure.py --defaults
+python measure.py --config
 ```
 The output should be (the different parameters will be explained later)
 ```

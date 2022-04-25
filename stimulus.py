@@ -4,18 +4,16 @@ from scipy.signal import fftconvolve
 
 from sine_sweep import sine_sweep
 
-class Stimulus:
-    # Constructor
-    def __init__(self, stimulusType, samplingRate):
 
-        self.type = stimulusType
+class Stimulus:
+    def __init__(self, samplingRate):
         self.fs = samplingRate
         self.Lp = []
         self.signal = []
         self.invfilter = []
 
     # Generate the stimulus and set requred attributes
-    def generate(self, fs, duration, amplitude, silenceAtStart, silenceAtEnd, sweeprange):
+    def generate(self, fs, duration, amplitude, silenceAtStart, sweeprange):
         self.signal, self.invfilter, self.Lp = sine_sweep(
             fs, duration, amplitude, sweeprange[0], sweeprange[1], silenceAtStart)
 
@@ -44,20 +42,17 @@ class Stimulus:
 
 
 def test_deconvolution(args):
-
-    type = 'sinesweep'
     fs = args.fs
     duration = args.duration
     amplitude = args.amplitude
     silenceAtStart = args.startsilence
-    silenceAtEnd = args.endsilence
     sweeprange = args.sweeprange
 
     # Create a test signal object, and generate the excitation
-    testStimulus = Stimulus(type, fs)
-    testStimulus.generate(fs, duration, amplitude,
-                          silenceAtStart, silenceAtEnd, sweeprange)
+    testStimulus = Stimulus(fs)
+    testStimulus.generate(fs, duration, amplitude, silenceAtStart, sweeprange)
     deltapeak = testStimulus.deconvolve(testStimulus.signal)
+    
     startid = duration*fs + silenceAtStart*fs - 150
     deltapeak = deltapeak[startid:startid + 300]
 

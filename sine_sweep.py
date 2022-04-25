@@ -1,7 +1,7 @@
 import numpy as np
 from scipy import signal
 
-EPS = 0.001
+from settings import EPS
 
 
 def sine_sweep(fs, duration, amplitude,
@@ -29,9 +29,8 @@ def sine_sweep(fs, duration, amplitude,
     sinsweep = _fade_at_last_zero_crossing(sinsweep)
     inverse_sweep = _invert_sine_sweep(sinsweep, amplitude, w1, w2)
     sinsweep = _fade_in(sinsweep)
-    sinsweep = _pad(sinsweep, duration, pad_duration_in_seconds, fs)
-    
-    # I think this can become simply sinsweep.shape
+    sinsweep = _pad(sinsweep, pad_duration_in_seconds, fs)
+
     padded_duration = (2*pad_duration_in_seconds + duration)*fs
 
     return sinsweep, inverse_sweep, padded_duration
@@ -84,7 +83,7 @@ def _invert_sine_sweep(sinsweep, amplitude, w1, w2):
     return invfilter/amplitude**2/scaling
 
 
-def _pad(sinsweep, duration, pad_duration_in_seconds, fs):
+def _pad(sinsweep, pad_duration_in_seconds, fs):
     # Final excitation including repetition and pauses
     sinsweep = np.expand_dims(sinsweep, axis=1)
     zerostart = np.zeros(shape=(pad_duration_in_seconds*fs, 1))

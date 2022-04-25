@@ -6,7 +6,6 @@ import sounddevice as sd
 
 # --------------------------
 def record(testsignal, fs, inputdevice, outputdevice, inputChannels, outputChannels):
-
     sd.default.device[0] = inputdevice
     sd.default.device[1] = outputdevice
     sd.default.samplerate = fs
@@ -51,8 +50,5 @@ def saverecording(RIR, RIRtoSave, testsignal, recorded, fs):
     np.save('recorded/lastRecording/RIR.npy', RIR)
     np.save('recorded/lastRecording/RIRac.npy', RIRtoSave)
     wavwrite('recorded/lastRecording/sigtest.wav', fs, testsignal)
-    for idx in range(recorded.shape[1]):
-        wavwrite('sigrec' + str(idx+1) + '.wav', fs, recorded[:, idx])
-        wavwrite(dirname + '/RIR' + str(idx+1) + '.wav', fs, RIR[:, idx])
 
     print('Success! Recording saved in directory ' + dirname)
