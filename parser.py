@@ -26,11 +26,9 @@ def parse():
     #---
     parser.add_argument("-a", "--amplitude", type = float, help = "Amplitude of the sine. Default: 0.7",default = config['amplitude'])
     #---
-    parser.add_argument("-ss", "--startsilence", type = int, help = "Duration of silence at the start of a sweep, in seconds. Default: 1.", default = config['startsilence'])
+    parser.add_argument("-ss", "--padsilence", type = int, help = "Duration of silence at the start and end of a sweep, in seconds. Default: 1.", default = config['padsilence'])
 
     parser.add_argument("-frange", "--sweeprange", nargs='+', type=int, help = "Frequency range of the sweep", default = config['sweeprange'])
-    #---
-    parser.add_argument("-es", "--endsilence", type = int, help = "Duration of silence at the end of a sweep, in seconds. Default: 1.", default = config['endsilence'])
     #---
     parser.add_argument("-chin", "--inputChannelMap", nargs='+', type=int, help = "Input channel mapping", default = config['inputChannelMap'])
 
@@ -65,8 +63,7 @@ def set_config(args):
         config = {
             "amplitude": args.amplitude,
             "duration" : args.duration,
-            "startsilence": args.startsilence,
-            "endsilence" : args.endsilence,
+            "padsilence": args.padsilence,
             "fs" : args.fs,
             "inputChannelMap" : args.inputChannelMap,
             "outputChannelMap": args.outputChannelMap,

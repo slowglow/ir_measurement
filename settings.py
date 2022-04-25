@@ -3,8 +3,7 @@ CONFIG_PATH = '_data/config.json'
 BASE_CONFIG = {
     "amplitude": 0.2,
     "duration" : 10,
-    "startsilence": 1,
-    "endsilence" : 1,
+    "padsilence": 1,
     "fs" : 44100,
     "inputChannelMap" : [1],
     "outputChannelMap": [1],

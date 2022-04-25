@@ -9,9 +9,11 @@ from matplotlib import pyplot as plt
 # modules from this software
 import parser
 
-from stimulus import Stimulus, test_deconvolution
+from deconvolution import deconvolve, test_deconvolution
 from recording import record, saverecording
 from settings import LEN_RIR_IN_SECS
+from sine_sweep import sine_sweep
+
 
 def list_devices():
     print(sd.query_devices())
@@ -31,30 +33,32 @@ def set_devices(args):
     print("Sucessfully selected audio devices. Ready to record.")
 
 
-def record_stimulus(args):
-    # Create a test signal object, and generate the excitation
-    testStimulus = Stimulus(args.fs)
-    testStimulus.generate(args.fs, args.duration, args.amplitude,
-                          args.startsilence, args.sweeprange)
+def measure_ir(args):
+    # 1. Create a test signal object, and generate the excitation
 
-    # Record
+    sinsweep, inverse_sweep, padded_duration = sine_sweep(
+        args.fs, args.duration, args.amplitude,
+        min_freq_in_hz=args.sweeprange[0], max_freq_in_hz=args.sweeprange[1],
+        pad_duration_in_seconds=args.padsilence
+    )
+
+    # 2. Record
     recorded = record(
-        testStimulus.signal, args.fs, args.inputdevice, args.outputdevice,
+        sinsweep, args.fs, args.inputdevice, args.outputdevice,
         args.inputChannelMap, args.outputChannelMap)
 
-    # Deconvolve
-    RIR = testStimulus.deconvolve(recorded)
+    # 3. Deconvolve
+    rir = deconvolve(recorded, inverse_sweep, padded_duration)
 
-    # Truncate
-    startId = testStimulus.signal.shape[0] - args.endsilence*args.fs - 1
+    # 3.1 Truncate
+    startId = sinsweep.shape[0] - args.padsilence*args.fs - 1
     endId = startId + int(LEN_RIR_IN_SECS*args.fs)
     # save some more samples before linear part to check for nonlinearities
     startIdToSave = startId - int(args.fs/2)
-    RIRtoSave = RIR[startIdToSave:endId, :]
-    RIR = RIR[startId:endId, :]
+    rir_to_save = rir[startIdToSave:endId, :]
+    rir = rir[startId:endId, :]
 
-    # Save recordings and RIRs
-    saverecording(RIR, RIRtoSave, testStimulus.signal, recorded, args.fs)
+    return rir, rir_to_save, sinsweep, recorded
 
 
 def main():
@@ -76,7 +80,8 @@ def main():
         plt.plot(deltapeak)
         plt.show()
     else:
-        record_stimulus(args)
+        rir, rir_to_save, sinsweep, recorded = measure_ir(args)
+        saverecording(rir, rir_to_save, sinsweep, recorded, args.fs)
 
 
 if __name__ == "__main__":
