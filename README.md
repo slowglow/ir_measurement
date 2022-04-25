@@ -1,4 +1,4 @@
-# ir_measurement
+# Impulse response measuring tool
 
 #### Measuring room impulse responses with ```python``` and ```sounddevice```
 
