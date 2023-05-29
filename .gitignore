@@ -22,3 +22,5 @@ rectones.py
 testdeconv.py
 local/
 stimuli/
+/*.bak
+/.*/config.json
