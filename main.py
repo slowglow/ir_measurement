@@ -7,7 +7,7 @@ import sounddevice as sd
 from matplotlib import pyplot as plt
 
 # modules from this software
-import parser
+import rir_argparser
 
 from deconvolution import deconvolve, test_deconvolution
 from recording import record, saverecording
@@ -28,7 +28,7 @@ def set_devices(args):
     sd.check_input_settings()
     sd.check_output_settings()
     print(sd.query_devices())
-    parser.set_config(args)
+    rir_argparser.set_config(args)
     print("Default input and output device: ", sd.default.device)
     print("Sucessfully selected audio devices. Ready to record.")
 
@@ -63,12 +63,12 @@ def measure_ir(args):
 
 def main():
     # --- Parse command line arguments and check config
-    flag_configInitialized = parser.check_config()
+    flag_configInitialized = rir_argparser.check_config()
     if not flag_configInitialized:
         return
 
-    args = parser.parse()
-    parser.set_config(args)
+    args = rir_argparser.parse()
+    rir_argparser.set_config(args)
     # -------------------------------
 
     if args.listdev == True:
