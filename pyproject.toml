@@ -1,0 +1,20 @@
+
+[project]
+name = "ir_measurement"
+version = "0.1.0"
+description = "Impulse Response Measurment with Audio Card"
+authors = [
+    {name = "B. L. Stoimenov", email = "B.L.Stoimenov@gmail.com"},
+]
+dependencies = [
+    "sounddevice>=0.4.6",
+    "matplotlib>=3.7.1",
+    "scipy>=1.9.3",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "Proprietary"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"

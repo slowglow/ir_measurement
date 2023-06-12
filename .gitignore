@@ -24,3 +24,5 @@ local/
 stimuli/
 /*.bak
 /.*/config.json
+/pdm/pdm/Cache
+/.pdm-python
